@@ -32,12 +32,13 @@ tft = st7789.ST7789(
        240,
        reset=Pin(23, Pin.OUT),
        cs=Pin(5, Pin.OUT),
-       dc=Pin(4, Pin.OUT),
+       dc=Pin(16, Pin.OUT),
+       backlight=Pin(4, Pin.OUT),
        rotation=1)
 
 tft.fill(st7789.BLACK)
 line = 0
 col = 0
 while True:
-    ausgabe = str(Hallo)
-    tft.text(font, ausgabe, 10, 10, st7789.YELLOW, st7789.BLACK)
+    ausgabe = str(bmp.temperature)
+    tft.text(font, ausgabe, 20, 20, st7789.YELLOW, st7789.BLACK)
