@@ -4,7 +4,7 @@
 
 #Hardware: ESP 32 + BMP 180
 
-#Version: 0.5
+#Version: 0.6
 
 from time import sleep                          # alle 10 Sekunden Temperatur messen 
 from machine import Pin, SoftSPI, SoftI2C       # Pin (BMP180 & TFT), SoftSPI (TFT), SoftI2C(BMP180) 
@@ -48,8 +48,10 @@ while True:
         ausgabe1= str(round(bmp.pressure / 100, 2))                         # ausgabe1 zuweisen
         ausgabe = ausgabe + '\xf8C'                                         # Einheit hinzugefügt
         ausgabe1 = ausgabe1 + str('hPascal')                                # Einheit hinzugefügt 
-        tft.text(font, ausgabe, 0, 20, st7789.WHITE, st7789.BLACK)            
-        tft.text(font, ausgabe1, 0, 40, st7789.WHITE, st7789.BLACK)
+        tft.text(font, ausgabe, 0, 40, st7789.WHITE, st7789.BLACK)
+        tft.text(font, 'Temperatur: ', 0, 20, st7789.WHITE, st7789.BLACK)            
+        tft.text(font, ausgabe1, 0, 80, st7789.WHITE, st7789.BLACK)
+        tft.text(font, 'Druck: ', 0, 60, st7789.WHITE, st7789.BLACK)
 
         temperatur = bmp.temperature                                        # temperatur zuweisen     
         if temperatur <= 23:                                                # LED nach Temperaturanzeige 
