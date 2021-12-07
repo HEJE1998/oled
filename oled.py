@@ -6,7 +6,7 @@
 
 #Sofware: libary für BH1750: https://github.com/PinkInk/upylib/blob/master/bh1750/bh1750/__init__.py
 
-#Version: 0.8
+#Version: 0.9
 
 from time import sleep                          # alle 10 Sekunden Temperatur messen 
 from machine import Pin, SoftSPI, SoftI2C       # Pin (BMP180 & TFT), SoftSPI (TFT), SoftI2C(BMP180) 
@@ -19,7 +19,6 @@ from romfonts import vga2_16x16 as font         # Schriftart laden
 i2c = SoftI2C(scl=Pin(22), sda=Pin(21))         # Objekt I2C(BMP180) instanzieren 
 bmp = BMP180(i2c)                               # Objekt bmp instanzieren
 bh = BH1750(i2c)                                # Objekt bh instanziert 
-
 
 spi = SoftSPI(                                  # Objekt spi(TFT) instanzieren 
         baudrate=20000000,                      # Kommuniktionsgeschwindigkeit        
@@ -50,17 +49,22 @@ line = 0                                                                # Zeile
 col = 0                                                                 # Spalte
 while True:
         ausgabe = str(round(bmp.temperature, 2))                            # ausgabe zuweisen
-        ausgabe1= str(round(bmp.pressure / 100, 2))                         # ausgabe1 zuweisen
-        ausgabe2= str(round(bh.luminance(BH1750.CONT_HIRES_2)))             # ausgabe2 zuweisen 
-        ausgabe = ausgabe + '\xf8C'                                         # Einheit hinzugefügt
-        ausgabe1 = ausgabe1 + str('hPascal')                                # Einheit hinzugefügt
-        ausgabe2 = ausgabe2 + str('lux')                                    # Einheit hinzugefügt 
-        tft.text(font, ausgabe, 0, 20, st7789.WHITE, st7789.BLACK)
-        tft.text(font, 'Temperatur: ', 0, 0, st7789.WHITE, st7789.BLACK)            
-        tft.text(font, ausgabe1, 0, 60, st7789.WHITE, st7789.BLACK)
-        tft.text(font, 'Druck: ', 0, 40, st7789.WHITE, st7789.BLACK)
-        tft.text(font, ausgabe2, 0, 100, st7789.WHITE, st7789.BLACK)
-        tft.text(font, 'Helligkeit: ', 0, 80, st7789.WHITE, st7789.BLACK)
+        ausgabe1 = str(round(bmp.pressure / 100, 2))                        # ausgabe1 zuweisen
+        ausgabe2 = str(round(bh.luminance(BH1750.CONT_HIRES_2)))            # ausgabe2 zuweisen
+        ausgabe3 = str(round(htu2x.humidity, 2))                            # ausgabe3 zuweisen 
+        ausgabe4 = str(round(htu2x.temperature, 2))                         # ausgabe4 zuweisen
+
+        ausgabe = str('Temperatur: ')+ ausgabe + '\xf8C'                    # Einheit hinzugefügt
+        ausgabe1 = str('Druck: ')+ ausgabe1 + str('hPascal')                # Einheit hinzugefügt
+        ausgabe2 = str('Helligkeit: ')+ ausgabe2 + str('lux')               # Einheit hinzugefügt 
+        ausgabe3 = str('Luftfeuchtigkeit:')+ ausgabe3 + str('%')
+        ausgabe4 = str('Tempereatur: ')+ ausgabe4 + '\xf8c'
+
+        tft.text(font, ausgabe, 0, 20, st7789.WHITE, st7789.BLACK)            
+        tft.text(font, ausgabe1, 0, 40, st7789.WHITE, st7789.BLACK)
+        tft.text(font, ausgabe2, 0, 60, st7789.WHITE, st7789.BLACK)
+        tft.text(font, ausgabe3, 0, 80, st7789.WHITE, st7789.BLACK)
+        tft.text(font, ausgabe4, 0, 100, st7789.WHITE, st7789.BLACK)
 
         temperatur = bmp.temperature                                        # temperatur zuweisen     
         if temperatur <= 23:                                                # LED nach Temperaturanzeige 
@@ -76,7 +80,6 @@ while True:
                 ledgelb.value(0)
                 ledrot.value(1)
         sleep(1)                                                             # Warten 5s
-
 
 
 
