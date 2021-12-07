@@ -6,7 +6,7 @@
 
 #Sofware: libary für BH1750: https://github.com/PinkInk/upylib/blob/master/bh1750/bh1750/__init__.py
 
-#Version: 0.7
+#Version: 0.8
 
 from time import sleep                          # alle 10 Sekunden Temperatur messen 
 from machine import Pin, SoftSPI, SoftI2C       # Pin (BMP180 & TFT), SoftSPI (TFT), SoftI2C(BMP180) 
