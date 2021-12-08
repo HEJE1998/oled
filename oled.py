@@ -2,23 +2,25 @@
 #ETS 2021
 #19.11.21
 
-#Hardware: ESP 32 + BMP 180 + BH1750
+#Hardware: ESP 32 + BMP 180 + BH1750 + HTU2X
 
 #Sofware: libary für BH1750: https://github.com/PinkInk/upylib/blob/master/bh1750/bh1750/__init__.py
 
-#Version: 0.9
+#Version: 1.0
 
 from time import sleep                          # alle 10 Sekunden Temperatur messen 
 from machine import Pin, SoftSPI, SoftI2C       # Pin (BMP180 & TFT), SoftSPI (TFT), SoftI2C(BMP180) 
 import st7789py as st7789                       # TFT Display
 from bmp180 import BMP180                       # BMP180 Temepratursensor 
-from bh1750 import BH1750                       # BH1750 Lichtsensor 
+from bh1750 import BH1750                       # BH1750 Lichtsensor
+from HTU2X import HTU21D                        # HTUX2 Luftfeuchtigkeitssensor  
 
 from romfonts import vga2_16x16 as font         # Schriftart laden 
  
 i2c = SoftI2C(scl=Pin(22), sda=Pin(21))         # Objekt I2C(BMP180) instanzieren 
 bmp = BMP180(i2c)                               # Objekt bmp instanzieren
-bh = BH1750(i2c)                                # Objekt bh instanziert 
+bh = BH1750(i2c)                                # Objekt bh instanziert
+htu2x = HTU21D(22,21)                           # Objekt ht instaziert 
 
 spi = SoftSPI(                                  # Objekt spi(TFT) instanzieren 
         baudrate=20000000,                      # Kommuniktionsgeschwindigkeit        
@@ -54,11 +56,11 @@ while True:
         ausgabe3 = str(round(htu2x.humidity, 2))                            # ausgabe3 zuweisen 
         ausgabe4 = str(round(htu2x.temperature, 2))                         # ausgabe4 zuweisen
 
-        ausgabe = str('Temperatur: ')+ ausgabe + '\xf8C'                    # Einheit hinzugefügt
-        ausgabe1 = str('Druck: ')+ ausgabe1 + str('hPascal')                # Einheit hinzugefügt
-        ausgabe2 = str('Helligkeit: ')+ ausgabe2 + str('lux')               # Einheit hinzugefügt 
-        ausgabe3 = str('Luftfeuchtigkeit:')+ ausgabe3 + str('%')
-        ausgabe4 = str('Tempereatur: ')+ ausgabe4 + '\xf8c'
+        ausgabe = str('T1:')+ ausgabe + '\xf8C'                    # Einheit hinzugefügt
+        ausgabe1 = str('p:')+ ausgabe1 + str('hPas.')              # Einheit hinzugefügt
+        ausgabe2 = str('lm:')+ ausgabe2 + str('lux')               # Einheit hinzugefügt 
+        ausgabe3 = str('rF:')+ ausgabe3 + str('%')
+        ausgabe4 = str('T2:')+ ausgabe4 + '\xf8c'
 
         tft.text(font, ausgabe, 0, 20, st7789.WHITE, st7789.BLACK)            
         tft.text(font, ausgabe1, 0, 40, st7789.WHITE, st7789.BLACK)
